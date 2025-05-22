@@ -16,7 +16,7 @@ let pipeSpacing = 150;
 let pipeTimer = 0;
 
 function preload() {
-  this.load.image('ball', 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Red_circle_frame.svg/1024px-Red_circle_frame.svg.png');
+ this.load.image('ball', 'https://i.imgur.com/1W3nL4L.png');
 }
 
 function create() {
