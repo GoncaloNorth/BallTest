@@ -9,7 +9,8 @@ const config = {
   scene: { preload, create, update }
 };
 
-let player, bot, pipes, scoreText, gameOver = false;
+let player, bot, playerPipes, botPipes;
+let scoreText, gameOver = false;
 let botAlive = true;
 let sharedSeed = 42;
 let pipeSpacing = 150;
@@ -20,7 +21,10 @@ function preload() {
 }
 
 function create() {
-  pipes = this.physics.add.group();
+  this.cameras.main.setBackgroundColor('#e0f7fa');
+
+  playerPipes = this.physics.add.group();
+  botPipes = this.physics.add.group();
 
   player = this.physics.add.sprite(100, 300, 'ball').setDisplaySize(40, 40);
   bot = this.physics.add.sprite(100, 300, 'ball').setDisplaySize(40, 40);
@@ -30,8 +34,8 @@ function create() {
     if (!gameOver) player.setVelocityY(-300);
   });
 
-  this.physics.add.collider(player, pipes, () => endGame(this));
-  this.physics.add.collider(bot, pipes, () => { botAlive = false; });
+  this.physics.add.collider(player, playerPipes, () => endGame(this));
+  this.physics.add.collider(bot, botPipes, () => { botAlive = false; });
 
   scoreText = this.add.text(10, 10, 'Score: 0', { fontSize: '16px', fill: '#000' });
 
@@ -59,16 +63,24 @@ function update(time, delta) {
 
 function addPipeRow(scene) {
   const gap = Phaser.Math.Between(120, 400);
+
   for (let y = 0; y < 600; y += 50) {
     if (y < gap - 80 || y > gap + 80) {
-      const pipeTop = scene.physics.add.staticImage(400, y, null).setSize(20, 50).setVisible(false);
-      const pipeBot = scene.physics.add.staticImage(800, y, null).setSize(20, 50).setVisible(false);
+      const pipeColor = 0x00bcd4;
 
-      pipes.add(pipeTop);
-      pipes.add(pipeBot);
+      // Left screen (player)
+      const pipeLeft = scene.add.rectangle(400, y + 25, 40, 50, pipeColor);
+      scene.physics.add.existing(pipeLeft);
+      pipeLeft.body.setVelocityX(-200);
+      pipeLeft.body.setImmovable(true);
+      playerPipes.add(pipeLeft);
 
-      pipeTop.body.velocity.x = -200;
-      pipeBot.body.velocity.x = -200;
+      // Right screen (bot)
+      const pipeRight = scene.add.rectangle(800, y + 25, 40, 50, pipeColor);
+      scene.physics.add.existing(pipeRight);
+      pipeRight.body.setVelocityX(-200);
+      pipeRight.body.setImmovable(true);
+      botPipes.add(pipeRight);
     }
   }
 }
@@ -82,4 +94,5 @@ function endGame(scene) {
 
 const gameLeft = new Phaser.Game({ ...config, parent: 'game-left' });
 const gameRight = new Phaser.Game({ ...config, parent: 'game-right' });
+
 
