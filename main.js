@@ -11,20 +11,20 @@ const config = {
 
 let player, bot, pipes, scoreText, gameOver = false;
 let botAlive = true;
-let sharedSeed = 42; // ensures both sides have same pipe layout
+let sharedSeed = 42;
 let pipeSpacing = 150;
 let pipeTimer = 0;
 
 function preload() {
- this.load.image('ball', 'https://i.imgur.com/1W3nL4L.png');
+  this.load.image('ball', 'https://i.imgur.com/1W3nL4L.png');
 }
 
 function create() {
   pipes = this.physics.add.group();
 
-  player = this.physics.add.sprite(100, 300, 'ball').setScale(0.05);
-  bot = this.physics.add.sprite(100, 300, 'ball').setScale(0.05);
-  bot.x += 400; // move bot to right screen
+  player = this.physics.add.sprite(100, 300, 'ball').setDisplaySize(40, 40);
+  bot = this.physics.add.sprite(100, 300, 'ball').setDisplaySize(40, 40);
+  bot.x += 400;
 
   this.input.on('pointerdown', () => {
     if (!gameOver) player.setVelocityY(-300);
@@ -35,7 +35,7 @@ function create() {
 
   scoreText = this.add.text(10, 10, 'Score: 0', { fontSize: '16px', fill: '#000' });
 
-  Phaser.Math.RND.seed = sharedSeed; // deterministic pipes
+  Phaser.Math.RND.seed = sharedSeed;
 }
 
 function update(time, delta) {
@@ -51,7 +51,6 @@ function update(time, delta) {
     bot.setVelocityY(-300);
   }
 
-  // Check if off-screen
   if (player.y > 600 || player.y < 0) endGame(this);
   if (bot.y > 600 || bot.y < 0) botAlive = false;
 
@@ -76,8 +75,11 @@ function addPipeRow(scene) {
 
 function endGame(scene) {
   gameOver = true;
+  scene.physics.pause();
+  player.setTint(0xff0000);
   scene.add.text(100, 250, 'Game Over', { fontSize: '32px', fill: '#f00' });
 }
 
 const gameLeft = new Phaser.Game({ ...config, parent: 'game-left' });
 const gameRight = new Phaser.Game({ ...config, parent: 'game-right' });
+
