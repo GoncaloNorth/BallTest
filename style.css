@@ -1,0 +1,30 @@
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f9f9f9;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+#app {
+  text-align: center;
+}
+input, button {
+  padding: 10px;
+  margin: 10px;
+  font-size: 1rem;
+}
+#game-screen {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.game-canvas {
+  width: 400px;
+  height: 600px;
+  background: #ffffff;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+}
